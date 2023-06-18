@@ -1,4 +1,11 @@
 ### [BEGIN] variables.tf ###
+variable "instance_count" {
+  description = <<EOD
+  [Optional] The number of virtual machines to create.
+  EOD
+  type = number
+  default = 1
+}
 ### [BEGIN] Object definitions ###
 variable "azurerm_windows_virtual_machine_object" {
   description = <<EOD
