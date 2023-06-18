@@ -1,7 +1,7 @@
 ### [BEGIN] locals.tf ###
 locals {
   enabled = module.this.enabled
-  e = local.enabled
+  e       = local.enabled
   ### [BEGIN] winrm_listener ###
   winrm_listener_object = flatten([for key, winrm in var.azurerm_windows_virtual_machine_object : [
     for index in range(length(winrm.winrm_listener)) : {
@@ -11,10 +11,10 @@ locals {
     ]
   ])
 
-  winrm_protocol = flatten([ for key,proto in local.winrm_listener_object : [
+  winrm_protocol = flatten([for key, proto in local.winrm_listener_object : [
     for index in range(length(keys(proto.winrm_listener_object))) : merge(
       {
-        key = key
+        key      = key
         protocol = proto.protocol[index]
       }
     )

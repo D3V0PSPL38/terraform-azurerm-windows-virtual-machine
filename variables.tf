@@ -3,8 +3,16 @@ variable "instance_count" {
   description = <<EOD
   [Optional] The number of virtual machines to create.
   EOD
-  type = number
-  default = 1
+  type        = number
+  default     = 1
+}
+
+variable "azure_location" {
+  description = <<EOD
+  [Required] The Azure location where the resource exists.
+  EOD
+  type        = string
+  default     = null
 }
 ### [BEGIN] Object definitions ###
 variable "azurerm_windows_virtual_machine_object" {
@@ -108,155 +116,6 @@ variable "azurerm_windows_virtual_machine_object" {
     })))
     tags = optional(map(string))
   }))
-  default = {}
-}
-
-variable "winrm_listener_object" {
-  description = <<EOD
-  [Optional] winrm_listener object.
-  EOD
-  type = object({
-    certificate_url = optional(string)
-    protocol        = optional(string)
-  })
-  default = {}
-}
-
-variable "termination_notification_object" {
-  description = <<EOD
-  [Optional] termination_notification object.
-  EOD
-  type = object({
-    enabled = optional(bool)
-    timeout = optional(string)
-  })
-  default = {}
-}
-
-variable "source_image_reference_object" {
-  description = <<EOD
-  [Optional] source_image_reference object.
-  EOD
-  type = object({
-    offer     = optional(string)
-    publisher = optional(string)
-    sku       = optional(string)
-    version   = optional(string)
-  })
-  default = {}
-}
-
-variable "secret_object" {
-  description = <<EOD
-  [Optional] secret object.
-  EOD
-  type = object({
-    certificate = optional(object({
-      store = optional(string)
-      url   = optional(string)
-    }))
-    key_vault_id = optional(string)
-  })
-  default = {}
-}
-
-variable "plan_object" {
-  description = <<EOD
-  [Optional] plan object.
-  EOD
-  type = object({
-    name      = optional(string)
-    product   = optional(string)
-    publisher = optional(string)
-  })
-  default = {}
-}
-
-variable "identity_object" {
-  description = <<EOD
-  [Optional] identity object.
-  EOD
-  type = object({
-    identity_ids = optional(list(string))
-    type         = optional(string)
-  })
-  default = {}
-}
-
-variable "gallery_application_object" {
-  description = <<EOD
-  [Optional] gallery_application object.
-  EOD
-  type = object({
-    version_id             = optional(string)
-    configuration_blob_uri = optional(string)
-    order                  = optional(number)
-    tag                    = optional(string)
-  })
-  default = {}
-}
-
-variable "boot_diagnostics_object" {
-  description = <<EOD
-  [Optional] boot_diagnostics object.
-  EOD
-  type = object({
-    storage_uri = optional(string)
-  })
-  default = {}
-}
-
-variable "additional_unattend_config_object" {
-  description = <<EOD
-  [Optional] additional_unattend_config object.
-  EOD
-  type = object({
-    content = optional(string)
-    setting = optional(string)
-  })
-  default = {}
-}
-
-variable "additional_capabilities_object" {
-  description = <<EOD
-  [Optional] additional_capabilities object.
-  EOD
-  type = object({
-    ultra_ssd_enabled = optional(bool)
-  })
-  default = {}
-}
-
-variable "os_disk_object" {
-  description = <<EOD
-  [Optional] os_disk object.
-  EOD
-  type = object({
-    caching              = optional(string)
-    storage_account_type = optional(string)
-    diff_disk_settings = optional(object({
-      option    = optional(string)
-      placement = optional(string)
-    }))
-    disk_encryption_set_id    = optional(string)
-    disk_size_gb              = optional(number)
-    name                      = optional(string)
-    security_encryption_type  = optional(string)
-    write_accelerator_enabled = optional(bool)
-  })
-  default = {}
-}
-
-variable "timeouts_object" {
-  description = <<EOD
-  [Optional] timeouts object.
-  EOD
-  type = object({
-    create = optional(string)
-    delete = optional(string)
-    read   = optional(string)
-    update = optional(string)
-  })
   default = {}
 }
 ### [END] Object definitions ###

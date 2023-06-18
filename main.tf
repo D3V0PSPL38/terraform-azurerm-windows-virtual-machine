@@ -9,36 +9,36 @@ module "label" {
   location        = var.azure_location
   label_order     = var.label_order
   id_length_limit = var.id_length_limit
-  tags            = local.tags
+  tags            = var.tags
   context         = module.this.context
 }
 
 resource "azurerm_windows_virtual_machine" "this" {
   # checkov:skip=BC_AZR_GENERAL_89: Encryption is handled via variable definition
   # checkov:skip=BC_AZR_GENERAL_14: Extension enablement is handled via variable definition
-  count = local.e ? var.instance_count : 0
-  depends_on = [var.azure_vm_depends_on]
-  name = format("%s-%02d", module.label.id, count.index + 1)
-  admin_password = var.admin_password
-  admin_username = var.admin_username
-  location = var.azure_location
+  count                 = local.e ? var.instance_count : 0
+  depends_on            = [var.azure_vm_depends_on]
+  name                  = format("%s-%02d", module.label.id, count.index + 1)
+  admin_password        = var.admin_password
+  admin_username        = var.admin_username
+  location              = var.azure_location
   network_interface_ids = var.network_interface_ids
   dynamic "os_disk" {
     for_each = var.azurerm_managed_disk_object
     iterator = disk
     content {
-      caching = disk.value.caching
+      caching              = disk.value.caching
       storage_account_type = disk.value.storage_account_type
       dynamic "diff_disk_settings" {
-        for_each = var.enable_diff_disk_settings == true ? var.diff_disk_setting : []
+        for_each   = var.enable_diff_disk_settings == true ? var.diff_disk_setting : []
         iterataror = diff
         content {
-          option = diff.value.option
+          option    = diff.value.option
           placement = diff.value.placement
         }
       }
       resource_group_name = var.resource_group_name
-      size = var.os_disk_size
+      size                = var.os_disk_size
       dynamic "additional_capabilities" {
         for_each = var.enable_additional_capabilities == true ? var.additional_capabilities : []
         iterator = capability
@@ -55,7 +55,7 @@ resource "azurerm_windows_virtual_machine" "this" {
         }
       }
       allow_extension_operations = var.allow_extension_operations
-      availability_set_id = var.availability_set_id
+      availability_set_id        = var.availability_set_id
       dynamic "boot_diagnostics" {
         for_each = var.enable_boot_diagnostics == true ? var.boot_diagnostics : []
         iterator = diag
@@ -64,23 +64,23 @@ resource "azurerm_windows_virtual_machine" "this" {
         }
       }
       capacity_reservation_group_id = var.capacity_reservation_group_id
-      computer_name = format("%s-%02d", var.computer_name, count.index + 1)
-      custom_data = var.custom_data
-      dedicated_host_id = var.dedicated_host_id
-      dedicated_host_group_id = var.dedicated_host_group_id
-      edge_zone = var.edge_zone
-      enable_automatic_updates = var.enable_automatic_updates
-      encryption_at_host_enabled = var.encryption_at_host_enabled
-      eviction_policy = var.eviction_policy
-      extensions_time_budget = var.extensions_time_budget
+      computer_name                 = format("%s-%02d", var.computer_name, count.index + 1)
+      custom_data                   = var.custom_data
+      dedicated_host_id             = var.dedicated_host_id
+      dedicated_host_group_id       = var.dedicated_host_group_id
+      edge_zone                     = var.edge_zone
+      enable_automatic_updates      = var.enable_automatic_updates
+      encryption_at_host_enabled    = var.encryption_at_host_enabled
+      eviction_policy               = var.eviction_policy
+      extensions_time_budget        = var.extensions_time_budget
       dynamic "gallery_application" {
         for_each = var.enable_gallery_application == true ? var.gallery_application : []
         iterator = app
         content {
-          version_id = app.value.version_id
+          version_id             = app.value.version_id
           configuration_blob_uri = app.value.configuration_blob_uri
-          order = app.value.order
-          tag = app.value.tag
+          order                  = app.value.order
+          tag                    = app.value.tag
         }
       }
       hotpatching_enabled = var.hotpatching_enabled
@@ -89,25 +89,25 @@ resource "azurerm_windows_virtual_machine" "this" {
         iterator = id
         content {
           identity_ids = id.value.identity_ids
-          type = id.value.type
+          type         = id.value.type
         }
       }
-      license_type = var.license_type
-      max_bid_price = var.max_bid_price
+      license_type          = var.license_type
+      max_bid_price         = var.max_bid_price
       patch_assessment_mode = var.patch_assessment_mode
-      patch_mode = var.patch_mode
+      patch_mode            = var.patch_mode
       dynamic "plan" {
         for_each = var.enable_plan == true ? var.plan : []
         iterator = plan
         content {
-          name = plan.value.name
-          product = plan.value.product
+          name           = plan.value.name
+          product        = plan.value.product
           promotion_code = plan.value.promotion_code
-          publisher = plan.value.publisher
+          publisher      = plan.value.publisher
         }
       }
-      platform_fault_domain = var.platform_fault_domain
-      priorty = var.priority
+      platform_fault_domain        = var.platform_fault_domain
+      priorty                      = var.priority
       proximity_placement_group_id = var.proximity_placement_group_id
       dynamic "secret" {
         for_each = var.enable_secret == true ? var.secret : []
@@ -118,23 +118,23 @@ resource "azurerm_windows_virtual_machine" "this" {
             iterator = cert
             content {
               store = cert.value.store
-              url = cert.value.url
+              url   = cert.value.url
             }
           }
           vault_id = secret.value.vault_id
         }
       }
       secure_boot_enabled = var.secure_boot_enabled
-      source_image_id = var.source_image_id
+      source_image_id     = var.source_image_id
       dynamic "source_image_reference" {
         for_each = var.enable_source_image_reference == true ? var.source_image_reference : []
         iterator = ref_image
         content {
-          id = ref_image.value.id
+          id        = ref_image.value.id
           publisher = ref_image.value.publisher
-          offer = ref_image.value.offer
-          sku = ref_image.value.sku
-          version = ref_image.value.version
+          offer     = ref_image.value.offer
+          sku       = ref_image.value.sku
+          version   = ref_image.value.version
         }
       }
       dynamic "termination_notification" {
@@ -142,7 +142,7 @@ resource "azurerm_windows_virtual_machine" "this" {
         iterator = term
         content {
           enabled = term.value.enabled
-          time = term.value.time
+          time    = term.value.time
         }
       }
       dynamic "timeouts" {
@@ -151,20 +151,20 @@ resource "azurerm_windows_virtual_machine" "this" {
         content {
           create = timeout.value.create
           delete = timeout.value.delete
-          read = timeout.value.read
+          read   = timeout.value.read
           update = timeout.value.update
         }
       }
-      timezone = var.timezone
-      user_data = var.user_data
+      timezone                     = var.timezone
+      user_data                    = var.user_data
       virtual_machine_scale_set_id = var.virtual_machine_scale_set_id
-      vtpm_enabled = var.vtpm_enabled
+      vtpm_enabled                 = var.vtpm_enabled
       dynamic "winrm_listener" {
         for_each = var.enable_winrm_listener == true ? var.winrm_listener : []
         iterator = winrm
         content {
           certificate_url = winrm.value.certificate_url
-          protocol = winrm.value.protocol
+          protocol        = winrm.value.protocol
         }
       }
       tags = module.label.tags
