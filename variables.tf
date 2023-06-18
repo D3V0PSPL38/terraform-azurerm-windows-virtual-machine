@@ -306,9 +306,9 @@ variable "winrm_listener_default" {
   description = <<EOD
   [Optional] Default winrm_listener settings.
   EOD
-  type = any
-  default     = {
-    protocol = "Http"
+  type        = any
+  default = {
+    protocol        = "Http"
     certificate_url = null
   }
 }
